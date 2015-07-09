@@ -1,0 +1,7 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_mqtt_host_title">MQTT Broker host name</string>
+    <string name="pref_mqtt_port_title">MQTT Broker port number</string>
+    <string name="pref_mqtt_user_title">MQTT Broker user name</string>
+    <string name="pref_mqtt_password_title">MQTT Broker password</string>
+</resources>

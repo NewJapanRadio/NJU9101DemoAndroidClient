@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="mqtt_host"
+        android:title="@string/pref_mqtt_host_title"
+        android:selectAllOnFocus="true"
+        android:inputType="textUri"
+        android:singleLine="true"
+        android:maxLines="1" />
+    <EditTextPreference
+        android:key="mqtt_port"
+        android:title="@string/pref_mqtt_port_title"
+        android:selectAllOnFocus="true"
+        android:inputType="number"
+        android:singleLine="true"
+        android:maxLines="1" />
+    <EditTextPreference
+        android:key="mqtt_user"
+        android:title="@string/pref_mqtt_user_title"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:maxLines="1" />
+    <EditTextPreference
+        android:key="mqtt_password"
+        android:title="@string/pref_mqtt_password_title"
+        android:selectAllOnFocus="true"
+        android:inputType="textVisiblePassword"
+        android:singleLine="true"
+        android:summary="password"
+        android:maxLines="1" />
+
+</PreferenceScreen>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fontsample="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://www.gueei.com/android-binding/"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:padding="10dp"
+    android:layout_height="fill_parent" >
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Start BLE Scan"
+        android:textColor="@color/white"
+        android:background="@drawable/bbuton_primary_rounded"
+        binding:onClick="startBleScan" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Stop BLE Scan"
+        android:textColor="@color/white"
+        android:background="@drawable/bbuton_danger_rounded"
+        binding:onClick="stopBleScan" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Read Data"
+        binding:onClick="readData"
+        android:textColor="@drawable/bbuton_text_color"
+        android:background="@drawable/bbuton_success_rounded"
+        binding:enabled="isBleDeviceEnabled" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" >
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="Sensor Data" />
+            <jp.co.njr.nju9101demo.CustomTextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center|right"
+                android:textSize="40sp"
+                android:textColor="@color/data_text_color"
+                android:shadowColor="@color/data_text_shadow_color"
+                android:shadowDx="0.0"
+                android:shadowDy="0.0"
+                android:shadowRadius="5"
+                fontsample:font="AndroidClock.ttf"
+                fontsample:style="bold"
+                binding:text="sensorData" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="Temperatre" />
+            <jp.co.njr.nju9101demo.CustomTextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center|right"
+                android:textSize="40sp"
+                android:textColor="@color/temp_text_color"
+                android:shadowColor="@color/temp_text_shadow_color"
+                android:shadowDx="0.0"
+                android:shadowDy="0.0"
+                android:shadowRadius="5"
+                fontsample:font="AndroidClock.ttf"
+                fontsample:style="bold"
+                binding:text="temperature" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="[degC]" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
