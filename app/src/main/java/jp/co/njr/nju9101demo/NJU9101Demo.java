@@ -28,7 +28,7 @@ public class NJU9101Demo extends BindingActivityV30
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         MqttConfigure mqttConfigure = new MqttConfigure();
         mqttConfigure.host = sharedPreferences.getString("mqtt_host", "");
-        mqttConfigure.port = Integer.valueOf(sharedPreferences.getString("mqtt_port", ""));
+        mqttConfigure.port = sharedPreferences.getString("mqtt_port", "");
         mqttConfigure.user = sharedPreferences.getString("mqtt_user", "");
         mqttConfigure.password = sharedPreferences.getString("mqtt_password", "");
 

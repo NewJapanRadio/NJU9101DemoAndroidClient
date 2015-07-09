@@ -45,8 +45,12 @@ public class MqttManager implements MqttCallback
 
     public void connect() {
         MqttConnectOptions option = new MqttConnectOptions();
-        option.setUserName(mMqttConfigure.user);
-        option.setPassword(mMqttConfigure.password.toCharArray());
+        if (mMqttConfigure.user != null && mMqttConfigure.user.length() != 0) {
+            option.setUserName(mMqttConfigure.user);
+        }
+        if (mMqttConfigure.password != null && mMqttConfigure.password.length() != 0) {
+            option.setPassword(mMqttConfigure.password.toCharArray());
+        }
         try {
             this.mMqttConnectToken = this.mMqttAndroidClient.connect(option);
         } catch (MqttException e) {
