@@ -1,8 +1,10 @@
 package jp.co.njr.nju9101demo;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import gueei.binding.v30.app.BindingActivityV30;
 
 public class NJU9101Demo extends BindingActivityV30
@@ -19,6 +21,13 @@ public class NJU9101Demo extends BindingActivityV30
         mMenuViewModel = new MenuViewModel(this);
         inflateAndBind(R.xml.mainactivity_metadata, mMainViewModel);
         bindOptionsMenu(mMenuViewModel);
+        if (!mMainViewModel.isBleSupported()) {
+            new AlertDialog.Builder(this)
+                .setTitle("Warning")
+                .setMessage("Your device does not support BLE")
+                .setPositiveButton("OK", null)
+                .show();
+        }
     }
 
     @Override
@@ -31,13 +40,16 @@ public class NJU9101Demo extends BindingActivityV30
         mqttConfigure.port = sharedPreferences.getString("mqtt_port", "");
         mqttConfigure.user = sharedPreferences.getString("mqtt_user", "");
         mqttConfigure.password = sharedPreferences.getString("mqtt_password", "");
-
-        mMainViewModel.initialize(mqttConfigure);
+        if (mMainViewModel.isBleSupported()) {
+            mMainViewModel.initialize(mqttConfigure);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mMainViewModel.deinitialize();
+        if (mMainViewModel.isBleSupported()) {
+            mMainViewModel.deinitialize();
+        }
     }
 }

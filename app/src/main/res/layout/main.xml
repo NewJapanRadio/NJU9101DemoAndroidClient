@@ -2,34 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fontsample="http://schemas.android.com/apk/res-auto"
     xmlns:binding="http://www.gueei.com/android-binding/"
+    xmlns:bootstrap="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:padding="10dp"
     android:layout_height="fill_parent" >
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="Start BLE Scan"
-        android:textColor="@color/white"
-        android:background="@drawable/bbuton_primary_rounded"
-        binding:onClick="startBleScan" />
-    <Button
+        bootstrap:bb_roundedCorners="true"
+        bootstrap:bb_type="primary"
+        binding:onClick="startBleScan"
+        binding:enabled="isBleSupported" />
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="Stop BLE Scan"
-        android:textColor="@color/white"
-        android:background="@drawable/bbuton_danger_rounded"
-        binding:onClick="stopBleScan" />
-    <Button
+        bootstrap:bb_roundedCorners="true"
+        bootstrap:bb_type="danger"
+        binding:onClick="stopBleScan"
+        binding:enabled="isBleSupported" />
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="Read Data"
         binding:onClick="readData"
-        android:textColor="@drawable/bbuton_text_color"
-        android:background="@drawable/bbuton_success_rounded"
+        bootstrap:bb_roundedCorners="true"
+        bootstrap:bb_type="success"
         binding:enabled="isBleDeviceEnabled" />
     <LinearLayout
         android:orientation="vertical"
