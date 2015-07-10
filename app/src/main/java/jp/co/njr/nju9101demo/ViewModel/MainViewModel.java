@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.view.View;
 
@@ -32,12 +33,15 @@ public class MainViewModel
     public Command startBleScan = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
-            if (BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-                mMainModel.startBleScan();
-            }
-            else {
-                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                ((Activity)MainViewModel.this.mContext).startActivityForResult(intent, REQUEST_ENABLE_BT);
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter != null) {
+                if (adapter.isEnabled()) {
+                    mMainModel.startBleScan();
+                }
+                else {
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    ((Activity)MainViewModel.this.mContext).startActivityForResult(intent, REQUEST_ENABLE_BT);
+                }
             }
         }
     };
@@ -49,6 +53,7 @@ public class MainViewModel
         }
     };
 
+    public BooleanObservable isBleSupported = new BooleanObservable();
     public BooleanObservable isBleDeviceEnabled = new BooleanObservable();
     public Command readData = new Command() {
         @Override
@@ -74,6 +79,7 @@ public class MainViewModel
     public MainViewModel(Context context) {
         mContext = context;
         mGuiThreadHandler = new Handler();
+        setEnabledAsync(isBleSupported, isBleSupported());
     }
 
     public void initialize(MqttConfigure mqttConfigure) {
@@ -145,5 +151,11 @@ public class MainViewModel
             if (resultCode == Activity.RESULT_OK) {
             }
         }
+    }
+
+    public boolean isBleSupported() {
+        PackageManager pm = mContext.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE) ||
+               pm.hasSystemFeature("jp.gr.java_conf.ble_profile.api.gatt");
     }
 }

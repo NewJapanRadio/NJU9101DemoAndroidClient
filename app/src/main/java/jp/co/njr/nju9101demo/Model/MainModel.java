@@ -51,12 +51,16 @@ public class MainModel {
     }
 
     public void startBleScan() {
-        mKonashiManager.startLeScan();
+        if (mKonashiManager != null) {
+            mKonashiManager.startLeScan();
+        }
     }
 
     public void stopBleScan() {
-        mKonashiManager.stopLeScan();
-        mKonashiManager.disconnect();
+        if (mKonashiManager != null) {
+            mKonashiManager.stopLeScan();
+            mKonashiManager.disconnect();
+        }
     }
 
     private Map readDataMap = new HashMap<String, Double>();
@@ -99,10 +103,14 @@ public class MainModel {
     }
 
     public void disconnectBle() {
-        mKonashiManager.disconnect();
+        if (mKonashiManager != null) {
+            mKonashiManager.disconnect();
+        }
     }
 
     public void disconnectMqtt() {
-        mMqttManager.release();
+        if (mMqttManager != null) {
+            mMqttManager.release();
+        }
     }
 }

@@ -13,7 +13,8 @@
         android:text="Start BLE Scan"
         android:textColor="@color/white"
         android:background="@drawable/bbuton_primary_rounded"
-        binding:onClick="startBleScan" />
+        binding:onClick="startBleScan"
+        binding:enabled="isBleSupported" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -21,7 +22,8 @@
         android:text="Stop BLE Scan"
         android:textColor="@color/white"
         android:background="@drawable/bbuton_danger_rounded"
-        binding:onClick="stopBleScan" />
+        binding:onClick="stopBleScan"
+        binding:enabled="isBleSupported" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

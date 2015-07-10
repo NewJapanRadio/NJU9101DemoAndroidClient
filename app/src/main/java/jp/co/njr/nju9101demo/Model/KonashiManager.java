@@ -350,18 +350,22 @@ public class KonashiManager implements BluetoothAdapter.LeScanCallback
     }
 
     public void startLeScan() {
-        // BLEスキャンのタイムアウト
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBluetoothAdapter.stopLeScan(KonashiManager.this);
-            }
-        }, SCAN_PERIOD);
-        mBluetoothAdapter.startLeScan(this);
+        if (mBluetoothAdapter != null) {
+            // BLEスキャンのタイムアウト
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBluetoothAdapter.stopLeScan(KonashiManager.this);
+                }
+            }, SCAN_PERIOD);
+            mBluetoothAdapter.startLeScan(this);
+        }
     }
 
     public void stopLeScan() {
-        mBluetoothAdapter.stopLeScan(this);
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.stopLeScan(this);
+        }
     }
 
     public void disconnect() {
