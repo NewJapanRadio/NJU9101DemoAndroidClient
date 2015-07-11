@@ -4,6 +4,8 @@
     xmlns:binding="http://www.gueei.com/android-binding/" >
     <item android:id="@+id/button1"
         android:title="Settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="always"
         binding:onClick="menuItemSettings"
         />
 </menu>
