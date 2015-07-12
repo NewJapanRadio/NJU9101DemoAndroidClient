@@ -74,6 +74,8 @@ public class NJU9101Model
     public static final int CMD_TMP = 0x08;
     public static final int CMD_AMP = 0x0A;
     public static final int CMD_AUX = 0x0C;
+    // Bit position
+    public static final int BIT_RDYB =0x08;
 
     private KonashiManager mKonashiManager;
 
@@ -82,6 +84,58 @@ public class NJU9101Model
 
     public NJU9101Model(KonashiManager konashiManager) {
         mKonashiManager = konashiManager;
+    }
+
+    private void readTemperatureActual() {
+        mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_TMPDATA0, 2, new Func<byte[]>() {
+            @Override
+            public void execute(byte[] readData) {
+                int rawData = ((readData[0] & 0xFF) << 8) + (readData[1] & 0xFF);
+                double temperature = calculateTemperature(rawData);
+                Log.d("BLE", String.valueOf(temperature) + "℃");
+                NJU9101Model.this.onTemperatureRead(temperature);
+            }
+        });
+    }
+
+    private void readSensorDataActual() {
+        mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_AMPDATA0, 2, new Func<byte[]>() {
+            @Override
+            public void execute(byte[] readData) {
+                Log.d("BLE", String.format("0x%04x", ((readData[0] & 0xFF) << 8) + (readData[1] & 0xFF)));
+                NJU9101Model.this.onSensorDataRead(readData);
+            }
+        });
+    }
+
+    private void pollReadyAndReadTemperature() {
+        mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_STATUS, 1, new Func<byte[]>() {
+            @Override
+            public void execute(byte[] readData) {
+                boolean ready = (readData[0] & BIT_RDYB) == 0x00;
+                if (ready == true) {
+                    NJU9101Model.this.readTemperatureActual();
+                }
+                else {
+                    NJU9101Model.this.pollReadyAndReadTemperature();
+                }
+            }
+        });
+    }
+
+    private void pollReadyAndReadSensorData() {
+        mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_STATUS, 1, new Func<byte[]>() {
+            @Override
+            public void execute(byte[] readData) {
+                boolean ready = (readData[0] & BIT_RDYB) == 0x00;
+                if (ready == true) {
+                    NJU9101Model.this.readSensorDataActual();
+                }
+                else {
+                    NJU9101Model.this.pollReadyAndReadSensorData();
+                }
+            }
+        });
     }
 
     private double calculateTemperature(int raw) {
@@ -97,15 +151,7 @@ public class NJU9101Model
         mKonashiManager.writeRegister(I2C_SLAVE_ADDRESS, ADR_CTRL, new byte[] { CMD_TMP }, 1, new Action() {
             @Override
             public void execute() {
-                mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_TMPDATA0, 2, new Func<byte[]>() {
-                    @Override
-                    public void execute(byte[] readData) {
-                        int rawData = ((readData[0] & 0xFF) << 8) + (readData[1] & 0xFF);
-                        double temperature = calculateTemperature(rawData);
-                        Log.d("BLE", String.valueOf(temperature) + "℃");
-                        NJU9101Model.this.onTemperatureRead(temperature);
-                    }
-                });
+                NJU9101Model.this.pollReadyAndReadTemperature();
             }
         });
     }
@@ -119,13 +165,7 @@ public class NJU9101Model
         mKonashiManager.writeRegister(I2C_SLAVE_ADDRESS, ADR_CTRL, new byte[] { CMD_AMP }, 1, new Action() {
             @Override
             public void execute() {
-                mKonashiManager.readRegister(I2C_SLAVE_ADDRESS, ADR_AMPDATA0, 2, new Func<byte[]>() {
-                    @Override
-                    public void execute(byte[] readData) {
-                        Log.d("BLE", String.format("0x%04x", ((readData[0] & 0xFF) << 8) + (readData[1] & 0xFF)));
-                        NJU9101Model.this.onSensorDataRead(readData);
-                    }
-                });
+                NJU9101Model.this.pollReadyAndReadSensorData();
             }
         });
     }
