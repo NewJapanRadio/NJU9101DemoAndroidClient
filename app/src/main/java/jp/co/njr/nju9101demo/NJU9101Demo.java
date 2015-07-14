@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.WindowManager;
 
 import gueei.binding.v30.app.BindingActivityV30;
 
@@ -28,6 +29,7 @@ public class NJU9101Demo extends BindingActivityV30
                 .setPositiveButton("OK", null)
                 .show();
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
@@ -51,5 +53,6 @@ public class NJU9101Demo extends BindingActivityV30
         if (mMainViewModel.isBleSupported()) {
             mMainViewModel.deinitialize();
         }
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

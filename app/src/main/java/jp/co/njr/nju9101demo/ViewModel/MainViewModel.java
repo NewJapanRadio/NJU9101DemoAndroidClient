@@ -49,6 +49,7 @@ public class MainViewModel
     public Command stopBleScan = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
+            mMainModel.stopContinuousReadData();
             mMainModel.stopBleScan();
         }
     };
@@ -58,7 +59,7 @@ public class MainViewModel
     public Command readData = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
-            mMainModel.readData();
+            mMainModel.startContinuousReadData(5000);
         }
     };
 
@@ -114,6 +115,7 @@ public class MainViewModel
     }
 
     public void deinitializeModel() {
+        mMainModel.stopContinuousReadData();
         mMainModel.disconnectBle();
         mMainModel.disconnectMqtt();
     }

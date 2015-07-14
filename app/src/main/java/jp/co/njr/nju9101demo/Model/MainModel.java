@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainModel {
     private static final int REQUEST_ENABLE_BT = 6;
@@ -17,6 +19,8 @@ public class MainModel {
     private KonashiManager mKonashiManager;
     private NJU9101Model mNJU9101Model;
     private MqttManager mMqttManager;
+    private Timer mReadDataTimer;
+    private TimerTask mReadDataTimerTask;
 
     public Func<Map<String, Double>> onDataRead;
     public Func<Boolean> onBleDeviceEnableChanged;
@@ -48,6 +52,14 @@ public class MainModel {
 
         mMqttManager = new MqttManager(mContext, mqttConfigure);
         mMqttManager.connect();
+
+        mReadDataTimer = new Timer();
+        mReadDataTimerTask = new TimerTask() {
+            public void run() {
+              MainModel.this.readData();
+            }
+        };
+
     }
 
     public void startBleScan() {
@@ -64,6 +76,14 @@ public class MainModel {
     }
 
     private Map readDataMap = new HashMap<String, Double>();
+
+    public void startContinuousReadData(int interval) {
+        mReadDataTimer.scheduleAtFixedRate(mReadDataTimerTask, 0, interval);
+    }
+
+    public void stopContinuousReadData() {
+        mReadDataTimer.cancel();
+    }
 
     public void readData() {
         // Read Temperature
