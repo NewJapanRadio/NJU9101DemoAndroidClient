@@ -19,6 +19,14 @@ public class MenuViewModel
         }
     };
 
+    public Command menuItemLicenses = new Command() {
+        @Override
+        public void Invoke(View view, Object... args) {
+            Intent intent = new Intent(mContext, LicensesActivity.class);
+            mContext.startActivity(intent);
+        }
+    };
+
     public MenuViewModel(Context context) {
         this.mContext = context;
     }

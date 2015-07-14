@@ -5,7 +5,12 @@
     <item android:id="@+id/button1"
         android:title="Settings"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom|withText"
         binding:onClick="menuItemSettings"
+        />
+    <item android:id="@+id/button2"
+        android:title="Licenses"
+        android:showAsAction="never"
+        binding:onClick="menuItemLicenses"
         />
 </menu>
