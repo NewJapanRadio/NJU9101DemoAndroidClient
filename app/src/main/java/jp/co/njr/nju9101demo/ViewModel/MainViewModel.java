@@ -65,13 +65,6 @@ public class MainViewModel
         }
     };
 
-    public Command startContinuousReadData = new Command() {
-        @Override
-        public void Invoke(View view, Object... args) {
-            mMainModel.startContinuousReadData(5);
-        }
-    };
-
     public Command readDataButtonClick = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
