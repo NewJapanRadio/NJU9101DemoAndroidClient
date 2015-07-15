@@ -23,9 +23,11 @@ public class MainModel {
     private MqttManager mMqttManager;
     private ScheduledExecutorService mScheduler;
     private ScheduledFuture<?> mFuture;
+    private Boolean mIsContinuousRead;
 
     public Func<Map<String, Double>> onDataRead;
     public Func<Boolean> onBleDeviceEnableChanged;
+    public Func<Boolean> onContinuousReadStateChanged;
 
     public MainModel(Context context, MqttConfigure mqttConfigure) {
         this.mContext = context;
@@ -74,6 +76,10 @@ public class MainModel {
     private Map readDataMap = new HashMap<String, Double>();
 
     public void startContinuousReadData(int interval) {
+        mIsContinuousRead = true;
+        if (onContinuousReadStateChanged != null) {
+            onContinuousReadStateChanged.execute(true);
+        }
         mFuture = mScheduler.scheduleAtFixedRate(
                 new Runnable() {
                     public void run() {
@@ -87,6 +93,10 @@ public class MainModel {
     public void stopContinuousReadData() {
         if (mFuture != null) {
             mFuture.cancel(true);
+        }
+        mIsContinuousRead = false;
+        if (onContinuousReadStateChanged != null) {
+            onContinuousReadStateChanged.execute(false);
         }
     }
 
@@ -136,6 +146,15 @@ public class MainModel {
     public void disconnectMqtt() {
         if (mMqttManager != null) {
             mMqttManager.release();
+        }
+    }
+
+    public Boolean isContinuousRead() {
+        if (mIsContinuousRead != null) {
+            return mIsContinuousRead;
+        }
+        else {
+            return false;
         }
     }
 }
