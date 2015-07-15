@@ -139,7 +139,7 @@ public class NJU9101Model
     }
 
     private double calculateTemperature(int raw) {
-        return raw/256.0;
+        return (short)raw/256.0;
     }
 
     private void onTemperatureRead(double temperature) {
