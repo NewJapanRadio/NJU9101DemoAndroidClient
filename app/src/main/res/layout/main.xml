@@ -25,14 +25,18 @@
         bootstrap:bb_type="danger"
         binding:onClick="stopBleScan"
         binding:enabled="isBleSupported" />
-    <com.beardedhen.androidbootstrap.BootstrapButton
+    <ToggleButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/btogglebuton_success_rounded"
+        android:textColor="@color/white"
         android:layout_margin="5dp"
-        android:text="@string/button_read_data"
-        binding:onClick="readData"
-        bootstrap:bb_roundedCorners="true"
-        bootstrap:bb_type="success"
+        android:longClickable="true"
+        android:textOff="Read Data"
+        binding:textOn="readDataButtonText"
+        binding:checked="readDataButtonChecked"
+        binding:onClick="readDataButtonClick"
+        binding:onLongClick="readDataButtonLongClick"
         binding:enabled="isBleDeviceEnabled" />
     <LinearLayout
         android:orientation="vertical"

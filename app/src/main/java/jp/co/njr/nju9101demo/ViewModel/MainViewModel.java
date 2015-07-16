@@ -49,16 +49,39 @@ public class MainViewModel
     public Command stopBleScan = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
+            mMainModel.stopContinuousReadData();
             mMainModel.stopBleScan();
         }
     };
 
+    public StringObservable readDataButtonText = new StringObservable();
+    public BooleanObservable readDataButtonChecked = new BooleanObservable();
     public BooleanObservable isBleSupported = new BooleanObservable();
     public BooleanObservable isBleDeviceEnabled = new BooleanObservable();
     public Command readData = new Command() {
         @Override
         public void Invoke(View view, Object... args) {
             mMainModel.readData();
+        }
+    };
+
+    public Command readDataButtonClick = new Command() {
+        @Override
+        public void Invoke(View view, Object... args) {
+            if (mMainModel.isContinuousRead()) {
+                mMainModel.stopContinuousReadData();
+            }
+            else {
+                setEnabledAsync(readDataButtonChecked, false);
+                mMainModel.readData();
+            }
+        }
+    };
+
+    public Command readDataButtonLongClick = new Command() {
+        @Override
+        public void Invoke(View view, Object... args) {
+            mMainModel.startContinuousReadData(5);
         }
     };
 
@@ -80,6 +103,7 @@ public class MainViewModel
         mContext = context;
         mGuiThreadHandler = new Handler();
         setEnabledAsync(isBleSupported, isBleSupported());
+        setTextAsync(readDataButtonText, "Read Data");
     }
 
     public void initialize(MqttConfigure mqttConfigure) {
@@ -106,6 +130,18 @@ public class MainViewModel
                 setEnabledAsync(isBleDeviceEnabled, enable);
             }
         };
+        mMainModel.onContinuousReadStateChanged = new Func<Boolean>() {
+            @Override
+            public void execute(Boolean enable) {
+                if (enable) {
+                    setTextAsync(readDataButtonText, mContext.getString(R.string.button_read_data_stop));
+                }
+                else {
+                    setTextAsync(readDataButtonText, mContext.getString(R.string.button_read_data));
+                }
+                setEnabledAsync(readDataButtonChecked, enable);
+            }
+        };
     }
 
     public void deinitialize() {
@@ -114,6 +150,7 @@ public class MainViewModel
     }
 
     public void deinitializeModel() {
+        mMainModel.stopContinuousReadData();
         mMainModel.disconnectBle();
         mMainModel.disconnectMqtt();
     }

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 
 import gueei.binding.v30.app.BindingActivityV30;
 
@@ -11,6 +13,7 @@ public class NJU9101Demo extends BindingActivityV30
 {
     private MainViewModel mMainViewModel;
     private MenuViewModel mMenuViewModel;
+    private WakeLock mWakeLock;
 
     /** Called when the activity is first created. */
     @Override
@@ -43,6 +46,9 @@ public class NJU9101Demo extends BindingActivityV30
         if (mMainViewModel.isBleSupported()) {
             mMainViewModel.initialize(mqttConfigure);
         }
+        PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getString(R.string.app_name));
+        mWakeLock.acquire();
     }
 
     @Override
@@ -51,5 +57,6 @@ public class NJU9101Demo extends BindingActivityV30
         if (mMainViewModel.isBleSupported()) {
             mMainViewModel.deinitialize();
         }
+        mWakeLock.release();
     }
 }

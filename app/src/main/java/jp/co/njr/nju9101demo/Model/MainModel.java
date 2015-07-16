@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledFuture;
 
 public class MainModel {
     private static final int REQUEST_ENABLE_BT = 6;
@@ -17,9 +21,13 @@ public class MainModel {
     private KonashiManager mKonashiManager;
     private NJU9101Model mNJU9101Model;
     private MqttManager mMqttManager;
+    private ScheduledExecutorService mScheduler;
+    private ScheduledFuture<?> mFuture;
+    private Boolean mIsContinuousRead;
 
     public Func<Map<String, Double>> onDataRead;
     public Func<Boolean> onBleDeviceEnableChanged;
+    public Func<Boolean> onContinuousReadStateChanged;
 
     public MainModel(Context context, MqttConfigure mqttConfigure) {
         this.mContext = context;
@@ -48,6 +56,8 @@ public class MainModel {
 
         mMqttManager = new MqttManager(mContext, mqttConfigure);
         mMqttManager.connect();
+
+        mScheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     public void startBleScan() {
@@ -64,6 +74,31 @@ public class MainModel {
     }
 
     private Map readDataMap = new HashMap<String, Double>();
+
+    public void startContinuousReadData(int interval) {
+        mIsContinuousRead = true;
+        if (onContinuousReadStateChanged != null) {
+            onContinuousReadStateChanged.execute(true);
+        }
+        mFuture = mScheduler.scheduleAtFixedRate(
+                new Runnable() {
+                    public void run() {
+                        MainModel.this.readData();
+                    }
+                },
+                0, interval, TimeUnit.SECONDS
+                );
+    }
+
+    public void stopContinuousReadData() {
+        if (mFuture != null) {
+            mFuture.cancel(true);
+        }
+        mIsContinuousRead = false;
+        if (onContinuousReadStateChanged != null) {
+            onContinuousReadStateChanged.execute(false);
+        }
+    }
 
     public void readData() {
         // Read Temperature
@@ -111,6 +146,15 @@ public class MainModel {
     public void disconnectMqtt() {
         if (mMqttManager != null) {
             mMqttManager.release();
+        }
+    }
+
+    public Boolean isContinuousRead() {
+        if (mIsContinuousRead != null) {
+            return mIsContinuousRead;
+        }
+        else {
+            return false;
         }
     }
 }

@@ -94,5 +94,6 @@
     <orderEntry type="library" exported="" name="org.eclipse.paho.client.mqttv3-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="org.eclipse.paho.android.service-1.0.2" level="project" />
+    <orderEntry type="module" module-name="AndroidBootstrap-AndroidBootstrap" exported="" />
   </component>
 </module>
